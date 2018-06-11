@@ -19,7 +19,7 @@ def get_tasks():
     return render_template("composers.html", composers=mongo.db.composers.find())
     
 # C     -----------------------
-# @app.route("/add_composer")
+@app.route("/add_composer")
 def add_composer():
     return "This will render the 'addcomposer.html'"
     
