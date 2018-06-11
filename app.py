@@ -12,12 +12,40 @@ app.config["MONGO_URI"] = getURI()
 
 mongo = PyMongo(app)
 
-
+# R     -----------------------
 @app.route("/")
-def home():
-    print(getDbName())
-    print(getURI())
-    return "Starting Composers Project " + getCollection()
+@app.route("/get_composers")
+def get_tasks():
+    return render_template("composers.html", composers=mongo.db.composers.find())
+    
+# C     -----------------------
+# @app.route("/add_composer")
+def add_composer():
+    return "This will render the 'addcomposer.html'"
+    
+@app.route("/insert_composer", methods=["POST"])
+def insert_composer():
+    return "This will only work with a POST. Used to create a new composer entry."
+
+# U     -----------------------
+@app.route("/edit_composer/<composer_id>")
+def edit_composer(composerid):
+    return "This will render the 'editcomposer.html'"
+
+@app.route("/update_composer/<composer_id>", methods=["POST"])
+def update_composer(composer_id):
+    return "This will only work with a POST. Used to update a composer entry."
+
+# D     -----------------------
+@app.route("/delete_task/<composer_id>")
+def delete_composer(composerid):
+    return "This will render the 'deletecomposer.html'"
+
+# @app.route("/")
+# def home():
+#     print(getDbName())
+#     print(getURI())
+#     return "Starting Composers Project " + getCollection()
 
 
 if __name__ == "__main__":
