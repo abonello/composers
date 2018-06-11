@@ -53,7 +53,7 @@ if __name__ == "__main__":
                             # Also produces debug statements in case of a bug
 ~~~~
 
-
+Start Git
 ~~~~
 git init
 touch .gitignore
