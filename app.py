@@ -1,14 +1,23 @@
 import os
 from flask import Flask, render_template  #, redirect, request, url_for, session
-# from flask_pymongo import PyMongo
+from flask_pymongo import PyMongo
 # from bson.objectid import ObjectId
 # import bcrypt
+from connect import getCollection, getDbName, getURI
 
 app = Flask(__name__)
 
+app.config["MONGO_DBNAME"] = getDbName()
+app.config["MONGO_URI"] = getURI()
+
+mongo = PyMongo(app)
+
+
 @app.route("/")
 def home():
-    return "Starting Composers Project"
+    print(getDbName())
+    print(getURI())
+    return "Starting Composers Project " + getCollection()
 
 
 if __name__ == "__main__":

@@ -1,18 +1,22 @@
 # Composers
 
 The aim of this project is to bring together the following items:
-* MongoDB - all CRUD functionality
-* Flask - to serve data from db to front end
-* dc.js - the use of dc.js, d3.js and crossfilter.js in the front end to chart the data
+* **MongoDB** - all CRUD functionality (on **mlab**)
+* **Flask** - to serve data from db to front end
+* **dc.js** - the use of dc.js, d3.js and crossfilter.js in the front end to chart the data
 
 I will be adding the following:
 * passwords for users will be hashed
 * calls to the database will be enclosed in a try - except
 
-I will also use a different .py file to store the database information so that
-it is not stored on github.
+I will use **bootstrap** for layout and styling.  
 
-Finally I want this project to be deployed on heroku.
+I will also use a different .py file to store the database information so that
+it is not stored on github.  
+
+Version control will be by using **Git**.  
+
+Finally I want this project to be deployed on **heroku**.
 
 
 
@@ -60,3 +64,5 @@ touch .gitignore
 ~~~~
 In .gitignore include the cloud nine folders and the .py file which will have
 the db connection information.
+
+
