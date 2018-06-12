@@ -33,6 +33,17 @@
         <a href="{{ url_for('add_composer') }}" class="waves-effect waves-light btn"><i class="material-icons right">receipt plus_one</i>Add Composer</a>
     </div>
     
-    <hr>
+    
+    
+    <div class="row">
+        {% for composer in composers %}
+            {{ composer.first_name }} | 
+            {{ composer.last_name }} | 
+            {{ composer.dob }} | 
+            {{ composer.dod }} | 
+            {{ composer.period }} |
+            {{ composer.nationality }} |
+        {% endfor %}
+    </div>
 
 {% endblock %}
