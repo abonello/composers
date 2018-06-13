@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
+    
     <div class="row">
+        This will be the administrator's page. Other users will not have access to this page but will have access to the charts.
+        
         <h3>Composers</h3>
+        <div class="row">
+            <a href="{{ url_for('add_composer') }}" class="waves-effect waves-light btn lime darken-4 hoverable"><i class="material-icons right">receipt plus_one</i>Add Composer</a>
+            <h4>Number of composers in the database: {{ composers.count() }}</h4>
+        </div>
         <ul class="collapsible">
             {% for composer in composers %}
             <li>
@@ -35,15 +42,17 @@
                     <br>
                     <p>Born: {{ composer.dob }}<br>
                        Died: {{ composer.dod }}</p>
+                       
+                    <p>
+                        {% if composer.information %}
+                        {{ composer.information }}
+                        {% endif %}
+                    </p>
                 </div>
             </li>
             {% endfor %}
         </ul>
     </div>
-    <div class="row">
-        <a href="{{ url_for('add_composer') }}" class="waves-effect waves-light btn lime darken-4 hoverable"><i class="material-icons right">receipt plus_one</i>Add Composer</a>
-    </div>
-    
     <hr>
 
 {% endblock %}

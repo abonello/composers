@@ -59,6 +59,7 @@ def insert_composer():
     data['dod'] = "{}/{}/{}".format(formatNumber(dataFromForm['dod-date']), formatNumber(dataFromForm['dod-month']), dataFromForm['dod-year'])
     data['period'] = dataFromForm['period']
     data['nationality'] = dataFromForm['nationality']
+    data['information'] = dataFromForm['info']
     # print("This is DATA:")
     # print(data)
     composers = mongo.db.composers
@@ -88,6 +89,7 @@ def update_composer(composer_id):
     data['dod'] = "{}/{}/{}".format(formatNumber(dataFromForm['dod-date']), formatNumber(dataFromForm['dod-month']), dataFromForm['dod-year'])
     data['period'] = dataFromForm['period']
     data['nationality'] = dataFromForm['nationality']
+    data['information'] = dataFromForm['info']
     composers = mongo.db.composers
     composers.update({"_id": ObjectId(composer_id)}, data)
     return redirect(url_for('get_composers'))
