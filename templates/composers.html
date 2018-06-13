@@ -28,7 +28,8 @@
                 <div class="collapsible-body">
                     <span>{{ composer.first_name }} {{ composer.last_name }} &emsp;&#8212;&emsp; {{ composer.nationality }} </span>
                     <br>
-                    And more info
+                    <p>Born: {{ composer.dob }}<br>
+                       Died: {{ composer.dod }}</p>
                 </div>
             </li>
             {% endfor %}
