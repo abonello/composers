@@ -33,7 +33,11 @@ def get_composers():
 @app.route("/add_composer")
 def add_composer():
     # return "This will render the 'addcomposer.html'"
-    return render_template("addcomposer.html")
+    all_periods = mongo.db.periods.find()
+    periods_list=[]
+    for period in all_periods:
+        periods_list.append(period['name'])
+    return render_template("addcomposer.html", periods=periods_list)
 
 @app.route("/insert_composer", methods=["POST"])
 def insert_composer():
