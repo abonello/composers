@@ -93,9 +93,13 @@ def update_composer(composer_id):
     return redirect(url_for('get_composers'))
 
 # D     -----------------------
-@app.route("/delete_task/<composer_id>")
-def delete_composer(composerid):
-    return "This will render the 'deletecomposer.html'"
+@app.route("/delete_composer/<composer_id>")
+def delete_composer(composer_id):
+    # return "This will render the 'deletecomposer.html'"
+    mongo.db.composers.remove({"_id": ObjectId(composer_id)})
+    return redirect(url_for('get_composers'))
+
+
 
 # @app.route("/")
 # def home():

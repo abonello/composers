@@ -16,8 +16,13 @@
                             <a href="{{ url_for('edit_composer', composer_id=composer._id) }}" class="waves-effect waves-light btn btn_small blue">Edit</a>
                         </div>
                     </div>
-                    <div class="task_header col s9">
+                    <div class="task_header col s7">
                         <strong>{{ composer.last_name }} ({{ composer.dob[6:] }} - {{ composer.dod[6:] }})</strong> &emsp;&#8212;&emsp;{{ composer.period }}
+                    </div>
+                    <div class="col s2">
+                        <div class="inline_actions">
+                            <a href="{{ url_for('delete_composer', composer_id=composer._id) }}"class="waves-effect waves-light btn btn_small">Delete</a>
+                        </div>
                     </div>
                 </div>
                 <div class="collapsible-body">
