@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for #, session
 from flask_pymongo import PyMongo
-# from bson.objectid import ObjectId
+from bson.objectid import ObjectId
 # import bcrypt
 from connect import getCollection, getDbName, getURI
 
@@ -12,6 +12,16 @@ app.config["MONGO_URI"] = getURI()
 collection = getCollection()
 
 mongo = PyMongo(app)
+
+
+# 2 digit date and month
+def formatNumber(n):
+    '''If the user inputs a date or month with one digit
+        an extra 0 is added in front. '''
+    if len(n) == 1:
+        return "0{}".format(n)
+    else:
+        return n
 
 # R     -----------------------
 @app.route("/")
@@ -25,17 +35,6 @@ def add_composer():
     # return "This will render the 'addcomposer.html'"
     return render_template("addcomposer.html")
 
-@app.route("/add_composer_test")
-def add_composer_test():
-    # return "This will render the 'addcomposer.html'"
-    return render_template("addcomposertest.html")
-    
-def formatNumber(n):
-    if len(n) == 1:
-        return "0{}".format(n)
-    else:
-        return n
-    
 @app.route("/insert_composer", methods=["POST"])
 def insert_composer():
     # return "This will only work with a POST. Used to create a new composer entry."
@@ -62,16 +61,51 @@ def insert_composer():
     composers.insert_one(data)
     
     return redirect(url_for("get_composers"))
-    
 
 # U     -----------------------
 @app.route("/edit_composer/<composer_id>")
-def edit_composer(composerid):
-    return "This will render the 'editcomposer.html'"
+def edit_composer(composer_id):
+    the_composer = mongo.db.composers.find_one({"_id": ObjectId(composer_id)})
+    print("The Composer:")
+    print(the_composer)
+    all_periods = mongo.db.periods.find()
+    periods_list=[]
+    print("Periods:")
+    for period in all_periods:
+        print(period['name'])
+        periods_list.append(period['name'])
+        
+    print("Periods LIST:")
+    print(periods_list)
+    # return "This will render the 'editcomposer.html'"
+    # return render_template("editcomposer.html", composer=the_composer, periods=all_periods)
+    return render_template("editcomposer.html", composer=the_composer, periods=periods_list)
+    
+@app.route("/edit_composertest")
+def edit_composertest():
+    # the_composer = mongo.db.composers.find_one({"_id": ObjectId(composer_id)})
+    all_periods = mongo.db.periods.find()
+    # return "This will render the 'editcomposer.html'"
+    # return render_template("editcomposer.html", composer=the_composer, periods=all_periods)
+    return render_template("editcomposer.html", periods=all_periods)
 
 @app.route("/update_composer/<composer_id>", methods=["POST"])
 def update_composer(composer_id):
     return "This will only work with a POST. Used to update a composer entry."
+
+@app.route("/update_task/<task_id>", methods=["POST"])
+def update_task(task_id):
+    tasks = mongo.db.tasks
+    tasks.update({"_id": ObjectId(task_id)},
+    # {
+    #     'task_name': str(request.form.get['task_name']),
+    #     'category_name': str(request.form.get['category_name']),
+    #     'task_description': str(request.form.get['task_description']),
+    #     'due_date': str(request.form.get['due_date']),
+    #     'is_urgent': str(request.form.get['is_urgent'])
+    # })
+    request.form.to_dict())
+    return redirect(url_for('get_tasks'))
 
 # D     -----------------------
 @app.route("/delete_task/<composer_id>")
