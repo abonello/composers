@@ -66,46 +66,27 @@ def insert_composer():
 @app.route("/edit_composer/<composer_id>")
 def edit_composer(composer_id):
     the_composer = mongo.db.composers.find_one({"_id": ObjectId(composer_id)})
-    print("The Composer:")
-    print(the_composer)
     all_periods = mongo.db.periods.find()
     periods_list=[]
-    print("Periods:")
     for period in all_periods:
-        print(period['name'])
         periods_list.append(period['name'])
-        
-    print("Periods LIST:")
-    print(periods_list)
-    # return "This will render the 'editcomposer.html'"
-    # return render_template("editcomposer.html", composer=the_composer, periods=all_periods)
     return render_template("editcomposer.html", composer=the_composer, periods=periods_list)
-    
-@app.route("/edit_composertest")
-def edit_composertest():
-    # the_composer = mongo.db.composers.find_one({"_id": ObjectId(composer_id)})
-    all_periods = mongo.db.periods.find()
-    # return "This will render the 'editcomposer.html'"
-    # return render_template("editcomposer.html", composer=the_composer, periods=all_periods)
-    return render_template("editcomposer.html", periods=all_periods)
 
 @app.route("/update_composer/<composer_id>", methods=["POST"])
 def update_composer(composer_id):
-    return "This will only work with a POST. Used to update a composer entry."
-
-@app.route("/update_task/<task_id>", methods=["POST"])
-def update_task(task_id):
-    tasks = mongo.db.tasks
-    tasks.update({"_id": ObjectId(task_id)},
-    # {
-    #     'task_name': str(request.form.get['task_name']),
-    #     'category_name': str(request.form.get['category_name']),
-    #     'task_description': str(request.form.get['task_description']),
-    #     'due_date': str(request.form.get['due_date']),
-    #     'is_urgent': str(request.form.get['is_urgent'])
-    # })
-    request.form.to_dict())
-    return redirect(url_for('get_tasks'))
+    print("Update composer with id {}".format(composer_id))
+    # return "This will only work with a POST. Used to update a composer entry."
+    dataFromForm = request.form.to_dict()
+    data = {}
+    data['first_name'] = dataFromForm['first_name']
+    data['last_name'] = dataFromForm['last_name']
+    data['dob'] = "{}/{}/{}".format(formatNumber(dataFromForm['dob-date']), formatNumber(dataFromForm['dob-month']), dataFromForm['dob-year'])
+    data['dod'] = "{}/{}/{}".format(formatNumber(dataFromForm['dod-date']), formatNumber(dataFromForm['dod-month']), dataFromForm['dod-year'])
+    data['period'] = dataFromForm['period']
+    data['nationality'] = dataFromForm['nationality']
+    composers = mongo.db.composers
+    composers.update({"_id": ObjectId(composer_id)}, data)
+    return redirect(url_for('get_composers'))
 
 # D     -----------------------
 @app.route("/delete_task/<composer_id>")
