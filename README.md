@@ -68,11 +68,54 @@ the db connection information.
 Built routes to implement CRUD for mongodb Database on mlab.
 
 
+### Push to GitHub
+~~~~
+git remote add origin https://github.com/abonello/composers.git
+git push -u origin master
+~~~~
+
+### Heroku deployment
+Create Procfile
+~~~~python
+web: python app.py
+~~~~
+
+~~~~
+heroku login
+heroku apps
+~~~~
+
+Creating the app on heroku site allows for more control of server.  
+Name of app: **composers-music**  
+If I create the app from command line the git remotes will be created automatically.
+Since I created the app in the website I have to create the git remotes manually.
+
+~~~~
+git remote add heroku https://git.heroku.com/composers-music.git
+~~~~
+
+To see the remotes available run:
+~~~~
+git remote -v
+~~~~
+The results are:
+~~~~
+    heroku  https://git.heroku.com/composers-music.git (fetch)
+    heroku  https://git.heroku.com/composers-music.git (push)
+    origin  https://github.com/abonello/composers.git (fetch)
+    origin  https://github.com/abonello/composers.git (push)
+~~~~
+
+Next I will push the project to heroku.
+~~~~
+git push -u heroku master
+~~~~
+
 
 ## To do
 
 Heroku deployment
-Push to GitHub
+
 DC.js charts
 
 
