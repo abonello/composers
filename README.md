@@ -1,5 +1,9 @@
 # Composers
 
+
+[Github repository](https://github.com/abonello/composers)  
+[Deployed on Heroku](https://composers-music.herokuapp.com)
+
 The aim of this project is to bring together the following items:
 * **MongoDB** - all CRUD functionality (on **mlab**)
 * **Flask** - to serve data from db to front end
