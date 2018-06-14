@@ -115,4 +115,4 @@ if __name__ == "__main__":
     #         port=int(os.environ.get('PORT')),
     #         debug = True)  # debug=True allows the changes to be picked automatically in the browser
                             # Also produces debug statements in case of a bug
-    app.run(host=getenv('IP'), port=int(os.getenv('PORT')), debug=True))
+    app.run(host=getenv('IP'), port=int(os.getenv('PORT')), debug=True)
