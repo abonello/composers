@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
     <h3>Edit Composer</h3>
+    
+    <!-- This paragraph is needed to pass composer.information to jQuery. It does not show up. -->
+    <p id="p-info" style="display: none;">{{ composer.information }}</p>
+    
     <div class="row">
         <form action="{{ url_for('update_composer', composer_id=composer._id) }}" method="POST" class="col s12">
         <!--<form action="{{ url_for('update_composer', composer_id="5b1f3ceca74acd26fe366f70") }}" method="POST" class="col s12">-->
@@ -62,8 +66,8 @@
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">subject</i>
-                    <input id="info" name="info" type="textarea" class="validate" class="materialize-textarea" value="{{ composer.information }}" placeholder="Information" autocomplete="off">
-                    <label class="active" for="natinality">Information</label>
+                    <textarea id="info" name="info" class="materialize-textarea" placeholder="Information" autocomplete="off"></textarea>
+                    <label class="active" for="info">Information</label>
                 </div>
             </div>
             
@@ -79,6 +83,16 @@
         {#{ task._id }#}
     </div>
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <!--//<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <script type="text/javascript">
+        $(document).ready(function(){
+            info = $('#p-info').text();
+            $('#info').val(info);
+            M.textareaAutoResize($('#info'));
+        });
+        
+    </script>
 
 {% endblock %}
