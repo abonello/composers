@@ -129,7 +129,9 @@ git push -u heroku master
 heroku ps:scale web=1
 ~~~~
 
-
+~~~~
+git push -u origin master
+~~~~
 
 
 

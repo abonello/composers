@@ -106,7 +106,9 @@ def delete_composer(composer_id):
     mongo.db.composers.remove({"_id": ObjectId(composer_id)})
     return redirect(url_for('get_composers'))
 
-
+@app.route("/charts")
+def charts():
+    return render_template('charts.html')
 
 # @app.route("/")
 # def home():
