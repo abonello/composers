@@ -3,18 +3,18 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify #,
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 # import bcrypt
-from connect import getDbName, getURI # Does not work in Heroku
+# from connect import getDbName, getURI # Does not work in Heroku
 
 app = Flask(__name__)
 
 # Use the following to run locally will need the import
-app.config["MONGO_DBNAME"] = getDbName()
-app.config["MONGO_URI"] = getURI()
+# app.config["MONGO_DBNAME"] = getDbName()
+# app.config["MONGO_URI"] = getURI()
 # collection = getCollection()
 
 # Use the following to run from heroku - remove the import
-# app.config["MONGO_DBNAME"] = os.getenv('MONGO_DBNAME')
-# app.config["MONGO_URI"] = os.getenv('MONGO_URI')
+app.config["MONGO_DBNAME"] = os.getenv('MONGO_DBNAME')
+app.config["MONGO_URI"] = os.getenv('MONGO_URI')
 
 mongo = PyMongo(app)
 
