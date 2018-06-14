@@ -111,10 +111,33 @@ Next I will push the project to heroku.
 git push -u heroku master
 ~~~~
 
+To deploy on heroku I had to do some changes to the code.
+
+1. I am using os.getenv instead of os.environ.get. I am not sure why but this is working.
+2. I cannot have a file that is included in the .gitignore and sent to heroku but not to github.
+    The log in details are stored as environment variables on heroku instead. (Same as for 
+    PORT and IP).
+
+To see the heroku logs run
+~~~~
+heroku logs
+~~~~
+
+After changes remember to run
+~~~~
+git push -u heroku master
+heroku ps:scale web=1
+~~~~
+
+
+
+
+
+
 
 ## To do
 
-Heroku deployment
+
 
 DC.js charts
 

@@ -3,16 +3,18 @@ from flask import Flask, render_template, request, redirect, url_for #, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 # import bcrypt
-# from connect import getCollection, getDbName, getURI // Does not work in Heroku
+from connect import getDbName, getURI # Does not work in Heroku
 
 app = Flask(__name__)
 
-# app.config["MONGO_DBNAME"] = getDbName()
-# app.config["MONGO_URI"] = getURI()
+# Use the following to run locally will need the import
+app.config["MONGO_DBNAME"] = getDbName()
+app.config["MONGO_URI"] = getURI()
 # collection = getCollection()
 
-app.config["MONGO_DBNAME"] = os.getenv('MONGO_DBNAME')
-app.config["MONGO_URI"] = os.getenv('MONGO_URI')
+# Use the following to run from heroku - remove the import
+# app.config["MONGO_DBNAME"] = os.getenv('MONGO_DBNAME')
+# app.config["MONGO_URI"] = os.getenv('MONGO_URI')
 
 mongo = PyMongo(app)
 
@@ -114,8 +116,8 @@ def delete_composer(composer_id):
 
 
 if __name__ == "__main__":
-    # app.run(host=os.environ.get('IP'),
+    # app.run(host=os.environ.get('IP'),      # Use to run locally
     #         port=int(os.environ.get('PORT')),
     #         debug = True)  # debug=True allows the changes to be picked automatically in the browser
                             # Also produces debug statements in case of a bug
-    app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
+    app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True) # Use for heroku. This works locally too.
