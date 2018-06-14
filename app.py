@@ -11,8 +11,8 @@ app = Flask(__name__)
 # app.config["MONGO_URI"] = getURI()
 # collection = getCollection()
 
-app.config["MONGO_DBNAME"] = getenv('MONGO_DBNAME')
-app.config["MONGO_URI"] = getenv('MONGO_URI')
+app.config["MONGO_DBNAME"] = os.getenv('MONGO_DBNAME')
+app.config["MONGO_URI"] = os.getenv('MONGO_URI')
 
 mongo = PyMongo(app)
 
@@ -118,4 +118,4 @@ if __name__ == "__main__":
     #         port=int(os.environ.get('PORT')),
     #         debug = True)  # debug=True allows the changes to be picked automatically in the browser
                             # Also produces debug statements in case of a bug
-    app.run(host=getenv('IP'), port=int(os.getenv('PORT')), debug=True)
+    app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
