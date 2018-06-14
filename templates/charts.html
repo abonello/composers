@@ -1,5 +1,189 @@
 {% extends "base.html" %}
 {% block content %}
-This is the Charts Page
+    <div class="row">
+        <div id="nationality">
+            <strong>Composers' Nationality</strong>
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a href="javascript:nationalityChart.filterAll(); dc.redrawAll();" class="reset"
+            style="display: none; ">reset</a>
+            <div class="clearfix"></div>
+        </div>
+    <!--</div>-->
+    <!--<div class="row">-->
+        <div id="nationality-pie">
+            <strong>Composers' Nationality</strong>
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a href="javascript:nationalityPieChart.filterAll(); dc.redrawAll();" class="reset"
+            style="display: none; ">reset</a>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="dob">
+            <strong>Composers' Year of Birth</strong>
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a href="javascript:dobChart.filterAll(); dc.redrawAll();" class="reset"
+            style="display: none; ">reset</a>
+            <div class="clearfix"></div>
+        </div>
+        <div id="dod">
+            <strong>Composers' Year of Birth</strong>
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a href="javascript:dodChart.filterAll(); dc.redrawAll();" class="reset"
+            style="display: none; ">reset</a>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!--<div class="row">-->
+    <!--    <div id="name">-->
+    <!--        <h3>Composers</h3>-->
+    <!--        <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>-->
+    <!--        <a href="javascript:name.filterAll(); dc.redrawAll();" class="reset"-->
+    <!--        style="display: none; ">reset</a>-->
+    <!--        <div class="clearfix"></div>-->
+    <!--    </div>-->
+    <!--</div>-->
+    <br>
+    <div class="row">
+        <div class="dc-data-count">
+            <span class="filter-count"></span> selected out of <span class="total-count"></span>
+             records | <a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+        </div>
+    </div>
+    <table class="table table-hover dc-data-table"></table>
+    
+    
+    <script type="text/javascript" src="static/vendor/js/d3.js"></script>
+    <script type="text/javascript" src="static/vendor/js/crossfilter.js"></script>
+    <script type="text/javascript" src="static/vendor/js/dc.js"></script>
+    <script>
+        // Global variables
+        
+        // required for charts
+        var nationalityChart = dc.rowChart("#nationality"),
+            dobChart = dc.rowChart("#dob"),
+            dodChart = dc.rowChart("#dod"),
+            nationalityPieChart = dc.pieChart("#nationality-pie");
+        
+        // required for visualisation table
+        var visCount = dc.dataCount(".dc-data-count"),
+            visTable = dc.dataTable(".dc-data-table");
+        
+        // d3.csv('../static/data/ndx.csv').then(function (data) {
+        // d3.json("/get_data").then(function(data) {
+        d3.csv("/get_data_csv").then(function(data) {
+            // console.log(data);
+            
+            // Crossfilter
+            var ndx = crossfilter(data);
+            var all = ndx.groupAll();
+            
+            // Dimensions
+            var nationalityDim = ndx.dimension(function(d) { return d['nationality']; }),
+                nationalityPieDim = ndx.dimension(function(d) { return d['nationality']; }),
+                dobDim = ndx.dimension(function(d) { return parseInt(d['dob'].slice(6, 10)); }),
+                dodDim = ndx.dimension(function(d) { return parseInt(d['dod'].slice(6, 10)); });
+            
+            // Create Groups
+            var nationalityGroup = nationalityDim.group().reduceCount(),
+                nationalityPieGroup = nationalityPieDim.group().reduceCount(),
+                dobGroup = dobDim.group().reduceCount(),
+                dodGroup = dodDim.group().reduceCount();
+            
+            nationalityChart   // for rowChart
+                .height(200)
+                .dimension(nationalityDim)
+                .group(nationalityGroup)
+                .elasticX(true);
+            
+            nationalityPieChart
+                .width(500)
+                .height(330)
+                .slicesCap(5)
+                .innerRadius(30)
+                .dimension(nationalityPieDim)
+                .group(nationalityPieGroup)
+                .legend(dc.legend())
+                // workaround for #703: not enough data is accessible through .label() to display percentages
+                .on('pretransition', function(chart) {
+                    chart.selectAll('text.pie-slice').text(function(d) {
+                        return d.data.key + ' ' + dc.utils.printSingleValue((d.endAngle - d.startAngle) / (2*Math.PI) * 100) + '%';
+                    })
+                });
+                
+            dobChart   // for rowChart
+                .height(400)
+                .dimension(dobDim)
+                .group(dobGroup)
+                .elasticX(true);
+                
+            dodChart   // for rowChart
+                .height(400)
+                .dimension(dodDim)
+                .group(dodGroup)
+                .elasticX(true);
+                
+            // Table
+            visCount
+                .dimension(ndx)
+                .group(all);
+                
+            visTable
+                .dimension(dobDim)
+                // .group(dateGroup)
+                // Data table does not use crossfilter group but rather a closure
+                // as a grouping function
+        // 		.group(function (d) {
+        //             var format = d3.format('02d');
+        //             var y = d.Timestamp.getFullYear();
+        //             var m = d.Timestamp.getMonth();
+        //             return y + '/' + format(m + 1);
+        //             // return d.Timestamp.getFullYear() + '/' + format(d.Timestamp.getMonth() + 1);
+        //         })
+                .group(function (d) {
+                    full_name = d.first_name + " " + d.last_name
+                    return full_name;
+                })
+                // .size(200) // I added this
+                .columns([ // specify the columns to display
+                    "Full name",
+                    {
+                        label: "Nationality",
+                        format: function (d) {
+                            return d.nationality;
+                        }
+                    },
+                    // "Nationality",
+                    {
+                        label: "Period",
+                        format: function (d) {
+                            return d.period;
+                        }
+                    },
+                    // "Period",
+                    {
+                        label: "Date of Birth",
+                        format: function (d) {
+                            return d.dob;
+                        }
+                    },
+                    {
+                        label: "Date of Death",
+                        format: function (d) {
+                            return d.dod;
+                        }
+                    }
+                    // "Date of Birth",
+                    // "Date of Death"
+                ]);
+                
+            
+
+                
+            dc.renderAll();
+            
+        }); // end d3 call
+        
+    </script>
 
 {% endblock %}

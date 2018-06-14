@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for #, session
+from flask import Flask, render_template, request, redirect, url_for, jsonify #, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 # import bcrypt
@@ -109,6 +109,55 @@ def delete_composer(composer_id):
 @app.route("/charts")
 def charts():
     return render_template('charts.html')
+
+@app.route("/get_data_csv")
+def get_data_csv():
+    data='"first_name","last_name","dob","dod","period","nationality"\n'
+    composers=mongo.db.composers.find()
+    for composer in composers:
+        item="{},{},{},{},{},{}\n".format(composer['first_name'],
+            composer['last_name'],
+            composer['dob'],
+            composer['dod'],
+            composer['period'],
+            composer['nationality'])
+            
+        data += item
+    # print(data)
+    return str(data)
+    
+@app.route("/get_data")
+def get_data():
+    data = []
+    composers=mongo.db.composers.find()
+    # print("Get Data function has been called.")
+    # print(composers)
+    for composer in composers:
+        item = {}
+        item['first_name'] = composer['first_name']
+        item['last_name'] = composer['last_name']
+        item['dob'] = composer['dob']
+        item['dod'] = composer['dod']
+        item['period'] = composer['period']
+        item['nationality'] = composer['nationality']
+        # if information:
+        #     item['information'] = composer['information']
+        data.append(item)
+    # print(data)
+    
+    # some_data = [
+    #     {"f_name": "George", "l_name": "Buffle", "dob": "1/5/1987", "dod": "5/12/2017"},
+    #     {"f_name": "Mary", "l_name": "Lame", "dob": "16/11/1945", "dod": "31/3/2015"},
+    #     {"f_name": "Kerry", "l_name": "Bundle", "dob": "28/7/1960", "dod": "22/4/2011"}
+    #     ]
+    # send_data = jsonify({"data": data})
+    # print(send_data)
+    # return send_data
+    # some_data_json = jsonify({"jdata": some_data})
+    # print("JSON")
+    # print(some_data_json)
+    # return(some_data_json)
+    return(jsonify({"composers": data}))
 
 # @app.route("/")
 # def home():
