@@ -3,13 +3,16 @@ from flask import Flask, render_template, request, redirect, url_for #, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 # import bcrypt
-from connect import getCollection, getDbName, getURI
+# from connect import getCollection, getDbName, getURI // Does not work in Heroku
 
 app = Flask(__name__)
 
-app.config["MONGO_DBNAME"] = getDbName()
-app.config["MONGO_URI"] = getURI()
-collection = getCollection()
+# app.config["MONGO_DBNAME"] = getDbName()
+# app.config["MONGO_URI"] = getURI()
+# collection = getCollection()
+
+app.config["MONGO_DBNAME"] = getenv('MONGO_DBNAME')
+app.config["MONGO_URI"] = getenv('MONGO_URI')
 
 mongo = PyMongo(app)
 
