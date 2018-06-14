@@ -65,4 +65,15 @@ touch .gitignore
 In .gitignore include the cloud nine folders and the .py file which will have
 the db connection information.
 
+Built routes to implement CRUD for mongodb Database on mlab.
+
+
+
+## To do
+
+Heroku deployment
+Push to GitHub
+DC.js charts
+
+
 
