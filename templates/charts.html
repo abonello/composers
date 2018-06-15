@@ -2,14 +2,14 @@
 {% block content %}
     <!-- Row 1 -->
     <div class="row">
-        <div id="nationality">
+        <div id="nationality" class="col s6">
             <strong>Composers' Nationality</strong>
             <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
             <a href="javascript:nationalityChart.filterAll(); dc.redrawAll();" class="reset"
             style="display: none; ">reset</a>
             <div class="clearfix"></div>
         </div>
-        <div id="nationality-pie">
+        <div id="nationality-pie"  class="col s6">
             <strong>Composers' Nationality</strong>
             <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
             <a href="javascript:nationalityPieChart.filterAll(); dc.redrawAll();" class="reset"
@@ -19,21 +19,31 @@
     </div>
     <!-- Row 2 -->
     <div class="row">
-        <div id="names">
+        <div id="names"  class="col s6">
             <strong>Composers' Name</strong>
             <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
             <a href="javascript:nameChart.filterAll(); dc.redrawAll();" class="reset"
             style="display: none; ">reset</a>
             <div class="clearfix"></div>
         </div>
-        <div id="dob">
+        <div id="periods"  class="col s6">
+            <strong>Music Period</strong>
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a href="javascript:nameChart.filterAll(); dc.redrawAll();" class="reset"
+            style="display: none; ">reset</a>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!-- Row 3 -->
+    <div class="row">
+        <div id="dob"  class="col s6">
             <strong>Composers' Year of Birth</strong>
             <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
             <a href="javascript:dobChart.filterAll(); dc.redrawAll();" class="reset"
             style="display: none; ">reset</a>
             <div class="clearfix"></div>
         </div>
-        <div id="dod">
+        <div id="dod"  class="col s6">
             <strong>Composers' Year of Birth</strong>
             <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
             <a href="javascript:dodChart.filterAll(); dc.redrawAll();" class="reset"
@@ -41,18 +51,9 @@
             <div class="clearfix"></div>
         </div>
     </div>
-    <!--<div class="row">-->
-    <!--    <div id="name">-->
-    <!--        <h3>Composers</h3>-->
-    <!--        <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>-->
-    <!--        <a href="javascript:name.filterAll(); dc.redrawAll();" class="reset"-->
-    <!--        style="display: none; ">reset</a>-->
-    <!--        <div class="clearfix"></div>-->
-    <!--    </div>-->
-    <!--</div>-->
     <br>
     <div class="row">
-        <div class="dc-data-count">
+        <div class="dc-data-count"  class="col s12">
             <span class="filter-count"></span> selected out of <span class="total-count"></span>
              records | <a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
         </div>
@@ -69,6 +70,7 @@
         // required for charts
         var nationalityChart = dc.rowChart("#nationality"),
             nameChart = dc.rowChart("#names"),
+            periodChart = dc.rowChart("#periods"),
             dobChart = dc.rowChart("#dob"),
             dodChart = dc.rowChart("#dod"),
             nationalityPieChart = dc.pieChart("#nationality-pie");
@@ -90,6 +92,7 @@
             var nationalityDim = ndx.dimension(function(d) { return d['nationality']; }),
                 nationalityPieDim = ndx.dimension(function(d) { return d['nationality']; }),
                 nameDim = ndx.dimension(function(d) { return d['first_name'] + " " + d['last_name']; }),
+                periodDim = ndx.dimension(function(d) { return d['period']; }),
                 dobDim = ndx.dimension(function(d) { return parseInt(d['dob'].slice(6, 10)); }),
                 dodDim = ndx.dimension(function(d) { return parseInt(d['dod'].slice(6, 10)); });
             
@@ -97,11 +100,13 @@
             var nationalityGroup = nationalityDim.group().reduceCount(),
                 nationalityPieGroup = nationalityPieDim.group().reduceCount(),
                 nameGroup = nameDim.group().reduceCount(),
+                periodGroup = periodDim.group().reduceCount(),
                 dobGroup = dobDim.group().reduceCount(),
                 dodGroup = dodDim.group().reduceCount();
             
             nationalityChart   // for rowChart
                 .height(200)
+                .margins({top: 30, right: 20, bottom: 30, left: 20})
                 .dimension(nationalityDim)
                 .group(nationalityGroup)
                 .elasticX(true);
@@ -123,8 +128,16 @@
             
             nameChart   // for rowChart
                 .height(400)
+                .margins({top: 30, right: 20, bottom: 30, left: 20})
                 .dimension(nameDim)
                 .group(nameGroup)
+                .elasticX(true);
+                
+            periodChart   // for rowChart
+                .height(300)
+                .margins({top: 30, right: 20, bottom: 30, left: 20})
+                .dimension(periodDim)
+                .group(periodGroup)
                 .elasticX(true);
                 
             dobChart   // for rowChart
