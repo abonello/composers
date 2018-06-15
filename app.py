@@ -1,20 +1,24 @@
 import os
+import csv
 from flask import Flask, render_template, request, redirect, url_for, jsonify #, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 # import bcrypt
-# from connect import getDbName, getURI # Does not work in Heroku
+from connect import getDbName, getURI # Does not work in Heroku
 
 app = Flask(__name__)
 
 # Use the following to run locally will need the import
-# app.config["MONGO_DBNAME"] = getDbName()
-# app.config["MONGO_URI"] = getURI()
+app.config["MONGO_DBNAME"] = getDbName()
+app.config["MONGO_URI"] = getURI()
 # collection = getCollection()
+FIELDS = {'first_name': True, 'last_name': True, 
+            'dob': True, 'dod': True, 'period': True, 
+            'nationality': True, 'information': False, '_id': False}
 
 # Use the following to run from heroku - remove the import
-app.config["MONGO_DBNAME"] = os.getenv('MONGO_DBNAME')
-app.config["MONGO_URI"] = os.getenv('MONGO_URI')
+# app.config["MONGO_DBNAME"] = os.getenv('MONGO_DBNAME')
+# app.config["MONGO_URI"] = os.getenv('MONGO_URI')
 
 mongo = PyMongo(app)
 
@@ -109,6 +113,21 @@ def delete_composer(composer_id):
 @app.route("/charts")
 def charts():
     return render_template('charts.html')
+
+@app.route("/get_data_json")
+def get_data_json():
+    composers=mongo.db.composers.find(projection=FIELDS)
+
+    composers_list = []
+    for composer in composers:
+        print(composer)
+        # composers_list.append(composer)
+        
+    # print(composers_list)
+    
+    # csv_reader = csv.DictReader(composers_list)
+    # for line in csv_reader:
+    #     print(line)
 
 @app.route("/get_data_csv")
 def get_data_csv():

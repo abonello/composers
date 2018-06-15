@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+    <!-- Row 1 -->
     <div class="row">
         <div id="nationality">
             <strong>Composers' Nationality</strong>
@@ -8,8 +9,6 @@
             style="display: none; ">reset</a>
             <div class="clearfix"></div>
         </div>
-    <!--</div>-->
-    <!--<div class="row">-->
         <div id="nationality-pie">
             <strong>Composers' Nationality</strong>
             <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
@@ -18,7 +17,15 @@
             <div class="clearfix"></div>
         </div>
     </div>
+    <!-- Row 2 -->
     <div class="row">
+        <div id="names">
+            <strong>Composers' Name</strong>
+            <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
+            <a href="javascript:nameChart.filterAll(); dc.redrawAll();" class="reset"
+            style="display: none; ">reset</a>
+            <div class="clearfix"></div>
+        </div>
         <div id="dob">
             <strong>Composers' Year of Birth</strong>
             <span class="reset" style="display: none;">Selected: <span class="filter"></span></span>
@@ -61,6 +68,7 @@
         
         // required for charts
         var nationalityChart = dc.rowChart("#nationality"),
+            nameChart = dc.rowChart("#names"),
             dobChart = dc.rowChart("#dob"),
             dodChart = dc.rowChart("#dod"),
             nationalityPieChart = dc.pieChart("#nationality-pie");
@@ -81,12 +89,14 @@
             // Dimensions
             var nationalityDim = ndx.dimension(function(d) { return d['nationality']; }),
                 nationalityPieDim = ndx.dimension(function(d) { return d['nationality']; }),
+                nameDim = ndx.dimension(function(d) { return d['first_name'] + " " + d['last_name']; }),
                 dobDim = ndx.dimension(function(d) { return parseInt(d['dob'].slice(6, 10)); }),
                 dodDim = ndx.dimension(function(d) { return parseInt(d['dod'].slice(6, 10)); });
             
             // Create Groups
             var nationalityGroup = nationalityDim.group().reduceCount(),
                 nationalityPieGroup = nationalityPieDim.group().reduceCount(),
+                nameGroup = nameDim.group().reduceCount(),
                 dobGroup = dobDim.group().reduceCount(),
                 dodGroup = dodDim.group().reduceCount();
             
@@ -110,6 +120,12 @@
                         return d.data.key + ' ' + dc.utils.printSingleValue((d.endAngle - d.startAngle) / (2*Math.PI) * 100) + '%';
                     })
                 });
+            
+            nameChart   // for rowChart
+                .height(400)
+                .dimension(nameDim)
+                .group(nameGroup)
+                .elasticX(true);
                 
             dobChart   // for rowChart
                 .height(400)
